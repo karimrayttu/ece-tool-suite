@@ -1,0 +1,25 @@
+{
+  "name": "ece-tool-suite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bench and design suite for electrical engineers: SCPI instrument control, power design, RTL, parts search.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "workspaces": [
+    "apps/desktop",
+    "apps/renderer"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "app": "npm --workspace apps/desktop start",
+    "backend": "node scripts/python.js -m ece_suite.main",
+    "build": "npm --workspace apps/renderer run build",
+    "typecheck": "npm --workspace apps/renderer run typecheck",
+    "test": "node scripts/python.js -m pytest -q",
+    "lint": "node scripts/python.js -m ruff check ece_suite tests",
+    "smoke": "node apps/desktop/smoke.js",
+    "dist": "npm --workspace apps/desktop run dist"
+  }
+}

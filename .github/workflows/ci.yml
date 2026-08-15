@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    # Windows is the platform the suite targets: LabVIEW automation, the one-click
+    # installers and USBTMC enumeration through Keysight IO Libraries are Windows-only.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+
+      # No instruments and no vendor toolchains on a runner, so the tests that need them
+      # skip themselves. Everything else (provenance, safety engine, SCPI decode, the
+      # calculators, the REST and WebSocket contracts) runs against the sim transports.
+      #
+      # `assistant` is installed because the MCP server and the agent bridge are part of the
+      # tested surface. `spice` is left out on purpose: it is GPL-3.0, and CI should exercise
+      # the same dependency set a redistributable build would carry.
+      - name: Install backend
+        working-directory: backend
+        run: pip install -e ".[assistant,dev]"
+
+      - name: Lint
+        working-directory: backend
+        run: python -m ruff check ece_suite tests
+
+      - name: Run tests
+        working-directory: backend
+        run: python -m pytest -q
+
+  renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck and build
+        run: npm run build

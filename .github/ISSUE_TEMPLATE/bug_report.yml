@@ -1,0 +1,65 @@
+name: Bug report
+description: Something behaves differently than documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If the bug involves an instrument, the `*IDN?` string is usually the single most
+        useful line in the report. The Connections tab prints it after Verify.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the Sources tab
+        2. Set DUT max V to 12, max I to 1
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: idn
+    attributes:
+      label: Instrument identity
+      description: The `*IDN?` response, if an instrument is involved.
+      placeholder: KEYSIGHT TECHNOLOGIES,DSOX1204G,CN00000000,01.20.2020
+
+  - type: dropdown
+    id: transport
+    attributes:
+      label: How is it connected
+      options:
+        - Not instrument related
+        - USB (USBTMC)
+        - LAN (VXI-11 / HiSLIP / raw socket)
+        - Serial
+        - GPIB
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, app version (bottom-left status bar), VISA layer.
+      placeholder: |
+        Windows 11 23H2 / Python 3.12.7 / app 0.1.0 / Keysight IO Libraries 2024
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Backend output or audit log
+      description: >
+        The sidecar console output, and the relevant lines from the audit log at
+        `~/.ece-suite/audit.log.jsonl`. Scrub anything you do not want public.
+      render: text

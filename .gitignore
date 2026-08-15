@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.venv-*/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Electron / Vite
+node_modules/
+dist/
+dist-electron/
+out/
+.vite/
+*.tsbuildinfo
+
+# Build output. The bundled CPython runtime is ~90 MB and is rebuilt per release;
+# see docs/packaging.md for how to produce it.
+backend/runtime/
+backend/_bundled_runtime/
+release/
+apps/desktop/dist/
+
+# Secrets. API keys are read from the environment, never from a committed file.
+.env
+.env.local
+*.local.json
+
+# Runtime data written by the app (audit log, DMM session recordings)
+.ece-suite/
+
+# Local scratch
+*.db
+*.sqlite
+*.sqlite3
+*.log
+_reference/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

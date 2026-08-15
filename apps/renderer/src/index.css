@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01", "tnum";
+  /* chassis: a faint vignette so panels read as modules in a rack */
+  background-image: radial-gradient(1200px 700px at 50% -10%, rgba(79, 157, 255, 0.04), transparent 60%),
+    radial-gradient(900px 500px at 90% 110%, rgba(167, 139, 250, 0.03), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* form controls inherit the app font (native selects default to system UI) */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.014em;
+}
+
+::selection {
+  background: rgba(79, 157, 255, 0.30);
+}
+
+/* dark chassis scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #29313d;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a4452;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Instrument-display "shader" treatment (noisehead display-shaders style):
+   an inset screen with a soft top glare and CRT scanlines. Put .crt-screen on
+   the container and render content inside; the overlays are pure CSS.
+--------------------------------------------------------------------------- */
+.crt-screen {
+  position: relative;
+  background: linear-gradient(180deg, #06090e 0%, #04070b 55%, #050a10 100%);
+  border: 1px solid #1a2330;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+.crt-screen::before {
+  /* top glass glare */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(172deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.015) 22%, transparent 40%);
+  z-index: 3;
+}
+.crt-screen::after {
+  /* scanlines */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.016) 0px,
+    rgba(255, 255, 255, 0.016) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 3;
+}
+
+/* machined outer bezel around a screen: a frame inside a frame, like a rack faceplate */
+.screen-frame {
+  padding: 4px;
+  border-radius: 13px;
+  background: linear-gradient(180deg, #131820 0%, #0c0f15 100%);
+  border: 1px solid #262d38;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 5px 16px rgba(0, 0, 0, 0.42);
+}
+
+/* phosphor-glow text for numeric readouts (DMM / counters) */
+.seg-readout {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: #b7f7e8;
+  text-shadow: 0 0 6px rgba(52, 211, 153, 0.55), 0 0 22px rgba(52, 211, 153, 0.18);
+}
+.seg-readout--cyan {
+  color: #bdf0fa;
+  text-shadow: 0 0 6px rgba(45, 212, 234, 0.55), 0 0 22px rgba(45, 212, 234, 0.18);
+}
+.seg-readout--amber {
+  color: #fde9bd;
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.55), 0 0 22px rgba(251, 191, 36, 0.18);
+}
+
+/* speaker-grille dot texture for chassis strips (very subtle) */
+.grille {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 5px 5px;
+}
+
+/* section label — Diva-style small caps module titles */
+.module-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7d8797;
+}
+
+/* smooth interactive feel everywhere */
+button, select, input, textarea, a {
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease,
+    box-shadow 180ms ease, opacity 140ms ease, transform 120ms ease;
+}
+button:active:not(:disabled) {
+  transform: translateY(0.5px);
+}
+
+/* dark instrument-display scroll areas keep a dimmer thumb */
+.instr-screen ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  background-clip: content-box;
+}

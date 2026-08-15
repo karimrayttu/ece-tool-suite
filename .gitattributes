@@ -1,0 +1,13 @@
+# Normalise line endings so a Windows checkout and a CI runner agree.
+* text=auto eol=lf
+
+*.cmd  text eol=crlf
+*.bat  text eol=crlf
+*.ps1  text eol=crlf
+
+*.png  binary
+*.ico  binary
+*.vi   binary
+
+# Screenshots dominate the diff otherwise.
+docs/tutorial/img/*.png linguist-documentation

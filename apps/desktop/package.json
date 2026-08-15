@@ -1,0 +1,48 @@
+{
+  "name": "ece-suite-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron shell for the ECE Tool Suite (spawns the Python sidecar).",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "smoke": "node smoke.js",
+    "predist": "node ../../scripts/check-runtime.js && npm run build --prefix ../renderer && ..\\..\\backend\\runtime\\python.exe -m pip install --quiet --no-warn-script-location --no-deps --force-reinstall ..\\..\\backend",
+    "dist": "electron-builder",
+    "predist:dir": "npm run predist",
+    "dist:dir": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.ece.toolsuite",
+    "productName": "ECE Tool Suite",
+    "electronVersion": "33.4.11",
+    "npmRebuild": false,
+    "directories": { "output": "../../release" },
+    "files": ["main.js", "preload.js", "sidecar.js"],
+    "extraResources": [
+      { "from": "../renderer/dist", "to": "renderer/dist" },
+      { "from": "../../assets", "to": "assets" },
+      { "from": "../../backend/runtime", "to": "backend/runtime", "filter": ["**/*", "!**/__pycache__/**"] }
+    ],
+    "win": { "target": ["nsis", "portable"], "icon": "../../assets/ece-tool-suite.ico" },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "ECE Tool Suite",
+      "menuCategory": "ECE Tools",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "uninstallDisplayName": "ECE Tool Suite ${version}",
+      "artifactName": "ECE-Tool-Suite-${version}-setup.exe"
+    },
+    "portable": { "artifactName": "ECE-Tool-Suite-${version}-portable.exe" }
+  }
+}

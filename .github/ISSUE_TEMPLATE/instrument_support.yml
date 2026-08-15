@@ -1,0 +1,48 @@
+name: Instrument support
+description: Ask for a model, vendor or SCPI dialect that the suite does not drive yet.
+labels: [instrument-support]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Vendor support lives in `backend/ece_suite/instruments/vendors.py` (SCPI dialect) and
+        `capabilities.py` (what the UI is allowed to offer). Adding a model is usually a
+        capability profile plus a handful of command overrides, not a new driver.
+
+  - type: input
+    id: idn
+    attributes:
+      label: "`*IDN?` response"
+      placeholder: RIGOL TECHNOLOGIES,DS1104Z,DS1ZA000000000,00.04.04
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: Instrument role
+      options:
+        - Oscilloscope
+        - Multimeter
+        - Spectrum analyzer
+        - Power supply
+        - Function generator
+        - Electronic load
+    validations:
+      required: true
+
+  - type: input
+    id: manual
+    attributes:
+      label: Programming manual
+      description: Link to the vendor's SCPI/programming guide for this model.
+    validations:
+      required: true
+
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: What currently happens
+      description: >
+        Does it connect and fail to verify? Verify and then misread? Paste the failing
+        command and the instrument's `:SYST:ERR?` response if you have it.
